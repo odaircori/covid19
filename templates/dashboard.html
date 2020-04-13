@@ -1,0 +1,163 @@
+{% extends 'template.html' %}
+{% block conteudo %}
+    <div class="dashboard">
+        {% with messages = get_flashed_messages() %}
+            {% if messages %}
+                <ul class="list-unstyled">
+                    {% for message in messages %}
+                        <li class="alert alert-warning">{{ message }}</li>
+                    {% endfor %}
+                </ul>
+            {% endif %}
+        {% endwith %}
+        <div class="row">
+            <div class="col">
+                <div class="top20 table-responsive-sm">
+                    <table class="table table-dark table-striped table-hover">
+                        <thead>
+                        <tr>
+                            <th colspan="5" style="text-align: center">TOP 20 DEATHS</th>
+                        </tr>
+                        <tr>
+                            <th>#</th>
+                            <th>País</th>
+                            <th>Total Confirmados</th>
+                            <th>Total de Mortes</th>
+                            <th>Porcentagem</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {% if listacovid %}
+                            {% for summario in listacovid %}
+                                <tr>
+                                    <td>{{ loop.index }}</td>
+                                    <td>{{ summario.Pais }}</td>
+                                    <td>{{ summario.TotalConfirmados }}</td>
+                                    <td>{{ summario.TotalMortes }}</td>
+                                    <td>{{ summario.Porcentagem }}%</td>
+                                </tr>
+                            {% endfor %}
+                        {% else %}
+                            <tr>
+                                <td colspan="5">API Fora do Ar!</td>
+                            </tr>
+                        {% endif %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="col">
+                <div class="pais bg-dark">
+                    <canvas id="chart" width="600" height="400"></canvas>
+                    <script>
+                        // bar chart data
+                        var barData = {
+                            labels: [
+                                {% for item in labels %}
+                                    "{{ item }}",
+                                {% endfor %}
+                            ],
+
+                            datasets: [{
+                                fillColor: "rgba(151,187,205,0.2)",
+                                strokeColor: "rgba(151,187,205,1)",
+                                pointColor: "rgba(151,187,205,1)",
+                                data: [
+                                    {% for item in values %}
+                                        "{{ item }}",
+                                    {% endfor %}
+                                ]
+                            }
+                            ]
+                        }
+
+                        // get bar chart canvas
+                        var mychart = document.getElementById("chart").getContext("2d");
+
+                        steps = 20
+                        max = {{max}}
+
+                            // draw bar chart
+                            new Chart(mychart).Bar(barData, {
+                                    scaleOverride: true,
+                                    scaleSteps: steps,
+                                    scaleStepWidth: Math.ceil(max / steps),
+                                    scaleStartValue: 0,
+                                    scaleShowVerticalLines: true,
+                                    scaleShowGridLines: true,
+                                    barShowStroke: true,
+                                    scaleShowLabels: true,
+                                    fontColor: "#ffffff"
+                                }
+                            );
+
+                    </script>
+                </div>
+            </div>
+            <div class="col">
+                <div class="buscar">
+
+                    {% if estados %}
+                        <form method="POST" action="{{ url_for('buscapais') }}">
+                            <div class="form-group">
+                                <select class="form-control" id="pais" name="pais">
+                                    <option selected>Selecione um País</option>
+                                    {% for pais in paises %}
+                                        <option value="{{ pais }}">{{ pais["Pais"] }}</option>
+                                    {% endfor %}
+                                </select>
+                                <button class="btn btn-primary btn-block">Pesquisar</button>
+                            </div>
+                        </form>
+                        <div class="table-responsive-sm">
+                            <table class="table table-dark table-striped table-hover">
+                                <thead>
+                                <tr>
+                                    <th colspan="4" style="text-align: center">{{ nomepais }}</th>
+                                </tr>
+                                <tr>
+                                    <th>#</th>
+                                    <th>Estado</th>
+                                    <th>Total Confirmados</th>
+                                    <th>Total de Mortes</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                {% for estado in estados %}
+                                    <tr>
+                                        <td>{{ loop.index }}</td>
+                                        <td>{{ estado.state|capitalize }}</td>
+                                        <td>{{ estado.confirmed }}</td>
+                                        <td>{{ estado.deaths }}</td>
+                                    </tr>
+                                {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+
+                    {% else %}
+
+                        <form method="POST" action="{{ url_for('buscapais') }}">
+                            <div class="form-group">
+                                <select class="form-control" id="pais" name="pais">
+                                    {% if paises %}
+                                        <option selected>Selecione um País</option>
+                                        {% for pais in paises %}
+                                            <option value="{{ pais }}">{{ pais["Pais"] }}</option>
+                                        {% endfor %}
+                                    {% else %}
+                                        <option selected>API fora do ar</option>
+                                    {% endif %}
+                                </select>
+                                <button class="btn btn-primary btn-block">Pesquisar</button>
+                            </div>
+                        </form>
+
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+{% endblock %}

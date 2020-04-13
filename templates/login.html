@@ -1,0 +1,37 @@
+{% extends 'template.html' %}
+{% block conteudo %}
+    <div class="login">
+        <div class="container-fluid h-100">
+        {% with messages = get_flashed_messages() %}
+            {% if messages %}
+                <ul id="messages" class="list-unstyled">
+                    {% for message in messages %}
+                        {% if message == 'Usuário ou senha inválidos!' %}
+                            <li class="alert alert-danger">{{ message }}</li>
+                        {% else %}
+                            <li class="alert alert-success">{{ message }}</li>
+                        {% endif %}
+                    {% endfor %}
+                </ul>
+            {% endif %}
+        {% endwith %}
+            <div class="row justify-content-center align-items-center h-100">
+                <div class="col col-sm-6 col-md-6 col-lg-4 col-xl-3">
+                    <form action="{{ url_for('autenticar') }}" method="POST">
+                        <div class="form-group">
+                            <input class="form-control form-control-lg"
+                                   placeholder="User" type="text" name="usuario" id="usuario">
+                        </div>
+                        <div class="form-group">
+                            <input class="form-control form-control-lg" placeholder="Password"
+                                   type="password" name="senha" id="senha">
+                        </div>
+                        <div class="form-group">
+                            <button class="btn btn-info btn-lg btn-block">Sign In</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

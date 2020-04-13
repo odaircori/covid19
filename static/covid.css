@@ -1,0 +1,27 @@
+html, body {
+    width:100%;
+    height:100%;
+    margin:0;
+    padding:0;
+}
+
+.top20 {
+    font-size:12px;
+    padding: 3em;
+}
+
+.login{
+    background: url("https://images.newscientist.com/wp-content/uploads/2020/02/11165812/c0481846-wuhan_novel_coronavirus_illustration-spl.jpg") no-repeat center;
+    width:100%;
+    height: 100%;
+    background-size: cover;
+}
+
+.pais {
+    padding: 3em;
+    color:#ffffff
+}
+
+.buscar {
+    padding:3em
+}
