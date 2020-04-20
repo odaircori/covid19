@@ -1,6 +1,6 @@
 from flask import Flask, request, url_for, render_template, redirect, session, flash
-import requests
 from classes import usuario
+import requests
 
 app = Flask(__name__)
 app.secret_key = 'covid19'
