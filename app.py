@@ -36,7 +36,7 @@ def dashboard():
                     "NovasMortes": sumario["NewDeaths"],
                     "TotalMortes": sumario["TotalDeaths"],
                     "UltimaAtualizacao": sumario["Date"],
-                    "Porcentagem": round(sumario["TotalDeaths"] / sumario["TotalConfirmed"],2) if sumario["TotalDeaths"] > 0 else 0
+                    "Porcentagem": round(sumario["TotalDeaths"] / sumario["TotalConfirmed"],2) * 100 if sumario["TotalDeaths"] > 0 else 0
                 }
                 listacovid.append(novosdados)
 
